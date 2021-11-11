@@ -1,6 +1,6 @@
 # logger.c
 
-An ANSI C (C86) lib for logs
+An ANSI C (C89) lib for logs
 
 Easy to use and easy.
 
