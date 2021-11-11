@@ -4,6 +4,8 @@ An ANSI C (C89) lib for logs
 
 Easy to use and easy.
 
+<img width="572" alt="image" src="https://user-images.githubusercontent.com/15613425/141317177-a3f8e39e-ee5d-404b-a54d-ef27c082f172.png">
+
 ## Build
 
 You can build this lib or copy/paste sources files in your project.
