@@ -3,13 +3,17 @@
 
 #define LOGGER_WITH_COLOR 1
 
-#define LOGGER_RESET_COLOR "\x1B[0m"
+#define LOGGER_RESET_STYLE "\x1B[0m"
 
+/* Color code */
 #define LOGGER_RED "\x1B[31m"
 #define LOGGER_YELLOW "\x1B[33m"
 #define LOGGER_GREEN "\x1B[32m"
 #define LOGGER_BLUE "\x1B[34m"
 #define LOGGER_MAGENTA "\x1B[35m"
+
+/* Style code */
+#define LOGGER_FAINT "\x1B[2m"
 
 #define LOGGER_INIT_MSG "logger.c initialization"
 #define LOGGER_CLOSE_MSG "logger.c close"

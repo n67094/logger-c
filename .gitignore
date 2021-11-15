@@ -54,4 +54,5 @@ dkms.conf
 build/logger*
 build/log
 tags
-
+lib/*
+.DS_Store

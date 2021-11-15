@@ -11,7 +11,7 @@ FILE* file = NULL;
 
 int loggerLevel = LOGGER_LEVEL_ALL;
 
-void static LoggerOpenFile()
+static void LoggerOpenFile()
 {
 	file = fopen(LOGGER_FILENAME, "a+");
 
@@ -21,27 +21,18 @@ void static LoggerOpenFile()
 	}
 };
 
-int static LoggerCloseFile()
+static int LoggerCloseFile()
 {
 	return fclose(file);
 }
 
-/*
- * Since va_copy is only available in c99 I use two va_list, va_list are invalidated by vprintf and vfprintf so it cannot be used twice
- */
-void static Logger(char* color, char* msg, char* prefix, va_list vList1, va_list vList2)
+static char* LoggerGetTime()
 {
 	time_t currentDate = time(NULL);
 
 	char* date = NULL;
 
-	int dateLength = 0;
-	int msgLength = strlen(msg);
-	int prefixLength = strlen(prefix);
-
 	if (currentDate == (time_t)(-1)) {
-		dateLength = strlen(LOGGER_NO_TIME_PREFIX);
-
 		date = LOGGER_NO_TIME_PREFIX;
 	} else {
 		date = asctime(gmtime(&currentDate));
@@ -50,56 +41,89 @@ void static Logger(char* color, char* msg, char* prefix, va_list vList1, va_list
 		char* newline = strchr(date, '\n');
 		if (newline != NULL)
 			*newline = '\0';
-
-		dateLength = strlen(date);
 	}
 
+	return date;
+}
+
+static void LoggerInFile(int msgLength, char* date, char* prefix, char* msg, va_list args)
+{
+	/* + 1 for \n added below*/
+	char* fullMsg = malloc(sizeof(char) * (msgLength + 1));
+	*fullMsg = '\0';
+
+	strcat(fullMsg, date);
+	strcat(fullMsg, prefix);
+	strcat(fullMsg, msg);
+	strcat(fullMsg, "\n");
+
+	vfprintf(file, fullMsg, args);
+
+	free(fullMsg);
+	fullMsg = NULL;
+}
+
+static void LoggerInConsole(int msgLength, char* date, char* color, char* prefix, char* msg, va_list args)
+{
+	char* fullMsg = fullMsg = malloc(sizeof(char) * (msgLength + 1));
+	*fullMsg = '\0';
+
+	if (LOGGER_WITH_COLOR)
+		strcat(fullMsg, LOGGER_FAINT);
+
+	strcat(fullMsg, date);
+
+	if (LOGGER_WITH_COLOR)
+		strcat(fullMsg, LOGGER_RESET_STYLE);
+
+	if (LOGGER_WITH_COLOR)
+		strcat(fullMsg, color);
+
+	strcat(fullMsg, prefix);
+
+	if (LOGGER_WITH_COLOR)
+		strcat(fullMsg, LOGGER_RESET_STYLE);
+
+	strcat(fullMsg, msg);
+	strcat(fullMsg, "\n");
+
+	vprintf(fullMsg, args);
+
+	free(fullMsg);
+	fullMsg = NULL;
+}
+
+/*
+ * Since va_copy is only available in c99 I use two va_list, va_list are invalidated by vprintf and vfprintf so it cannot be used twice
+ */
+static void Logger(char* color, char* msg, char* prefix, va_list vList1, va_list vList2)
+{
+	int msgLength = strlen(msg);
+	int prefixLength = strlen(prefix);
+
+	char* date = LoggerGetTime();
+	int dateLength = strlen(date);
+
 	if (LOGGER_IN_FILE) {
-		/* + 1 for \n added below*/
-		char* fullMsg = malloc(sizeof(char) * (dateLength + prefixLength + msgLength + 1));
-		*fullMsg = '\0';
+		int fullMsgLength = dateLength + prefixLength + msgLength;
 
-		strcat(fullMsg, date);
-		strcat(fullMsg, prefix);
-		strcat(fullMsg, msg);
-		strcat(fullMsg, "\n");
-
-		vfprintf(file, fullMsg, vList1);
-
-		free(fullMsg);
-		fullMsg = NULL;
+		LoggerInFile(fullMsgLength, date, prefix, msg, vList1);
 	}
 
 	if (LOGGER_IN_CONSOLE) {
-
-		char* fullMsg = NULL;
+		int fullMsgLength = 0;
 
 		if (LOGGER_WITH_COLOR == 1) {
+			int faintStyleLength = strlen(LOGGER_FAINT);
 			int colorLength = strlen(color);
+			int resetStyleLength = strlen(LOGGER_RESET_STYLE);
 
-			/* + 1 for \n added below*/
-			fullMsg = malloc(sizeof(char) * (colorLength + dateLength + prefixLength + msgLength + 1));
-			*fullMsg = '\0';
-
-			strcat(fullMsg, color);
+			fullMsgLength = faintStyleLength + dateLength + resetStyleLength + colorLength + prefixLength + resetStyleLength + msgLength;
 		} else {
-			/* + 1 for \n added below*/
-			fullMsg = malloc(sizeof(char) * (dateLength + prefixLength + msgLength + 1));
-			*fullMsg = '\0';
+			fullMsgLength = dateLength + prefixLength + msgLength;
 		}
 
-		strcat(fullMsg, date);
-		strcat(fullMsg, prefix);
-		strcat(fullMsg, msg);
-		strcat(fullMsg, "\n");
-
-		vprintf(fullMsg, vList2);
-
-		if (LOGGER_WITH_COLOR)
-			printf("%s", LOGGER_RESET_COLOR);
-
-		free(fullMsg);
-		fullMsg = NULL;
+		LoggerInConsole(fullMsgLength, date, color, prefix, msg, vList2);
 	}
 };
 
