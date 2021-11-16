@@ -2,8 +2,6 @@
 
 An ANSI C (C89) lib for logs
 
-Easy to use and easy.
-
 <img width="588" alt="image" src="https://user-images.githubusercontent.com/15613425/141855281-0a910dbc-3532-4e43-888e-8f5e60aeaddf.png">
 
 ## Build
