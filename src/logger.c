@@ -11,7 +11,7 @@ FILE* file = NULL;
 
 int loggerLevel = LOGGER_LEVEL_ALL;
 
-/* used to know if we can write in file, set to 1 if not file can be opened */
+/* used to know if we can write in file, set to 1 if the file can't be opened */
 int loggerFileError = 0;
 
 static void LoggerReplaceSpace(char* pointer, char character)

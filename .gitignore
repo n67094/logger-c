@@ -52,7 +52,7 @@ Mkfile.old
 dkms.conf
 
 build/logger*
-build/log
+build/log-*
 tags
 lib/*
 .DS_Store
