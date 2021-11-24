@@ -1,0 +1,10 @@
+2021-11-24 19:20:06 - [INFO] ---- logger.c initialization
+2021-11-24 19:20:06 - [ERROR] --- Error one : 1 two : 2.000000 three : three
+2021-11-24 19:20:06 - [WARNING] - warning one : 1 two : 2.000000 three : three
+2021-11-24 19:20:06 - [SUCCESS] - success one : 1 two : 2.000000 three : three
+2021-11-24 19:20:06 - [ERROR] --- assets path not found ../assets/image.png
+2021-11-24 19:20:06 - [WARNING] - retry fetch, network error
+2021-11-24 19:20:06 - [SUCCESS] - data fetched 230ms
+2021-11-24 19:20:06 - [INFO] ---- init queue
+2021-11-24 19:20:06 - [DEBUG] --- user email is : user@test.test
+2021-11-24 19:20:06 - [INFO] ---- logger.c close

@@ -11,39 +11,75 @@ FILE* file = NULL;
 
 int loggerLevel = LOGGER_LEVEL_ALL;
 
-static void LoggerOpenFile()
-{
-	file = fopen(LOGGER_FILENAME, "a+");
+/* used to know if we can write in file, set to 1 if not file can be opened */
+int loggerFileError = 0;
 
-	if (file == NULL) {
-		printf("log.c error opening file %s", LOGGER_FILENAME);
-		exit(0);
+static void LoggerReplaceSpace(char* pointer, char character)
+{
+	while (*pointer) {
+		if (*pointer == ' ')
+			*pointer = character;
+
+		pointer++;
 	}
-};
-
-static int LoggerCloseFile()
-{
-	return fclose(file);
 }
 
+/* returned pointer should be freed*/
 static char* LoggerGetTime()
 {
+	char* date = NULL;
 	time_t currentDate = time(NULL);
 
-	char* date = NULL;
-
 	if (currentDate == (time_t)(-1)) {
-		date = LOGGER_NO_TIME_PREFIX;
+		date = malloc(sizeof(char) * strlen(LOGGER_NO_TIME_PREFIX));
+		strcpy(date, LOGGER_NO_TIME_PREFIX);
 	} else {
-		date = asctime(gmtime(&currentDate));
+		int dateLength = sizeof(char) * 20;
+		date = malloc(dateLength);
 
-		/* remove \n of asctime() */
+		strftime(date, dateLength, "%Y-%m-%d %H:%M:%S", gmtime(&currentDate));
+
 		char* newline = strchr(date, '\n');
 		if (newline != NULL)
 			*newline = '\0';
 	}
 
 	return date;
+}
+
+static int LoggerOpenFile()
+{
+	char* date = LoggerGetTime();
+
+	int filenameLength = strlen(LOGGER_FILENAME);
+	int dateLength = strlen(date);
+
+	/* + 1 for the - between filename and date */
+	char* fullFilename = malloc(sizeof(char) * (filenameLength + dateLength + 1));
+
+	strcat(fullFilename, LOGGER_FILENAME);
+	strcat(fullFilename, "-");
+	strcat(fullFilename, date);
+
+	LoggerReplaceSpace(fullFilename, '_');
+
+	file = fopen(fullFilename, "a+");
+
+	if (file == NULL) {
+		printf("log.c error opening file %s", fullFilename);
+		loggerFileError = 1;
+		return 1;
+	}
+
+	free(fullFilename);
+	fullFilename = NULL;
+
+	return 0;
+};
+
+static int LoggerCloseFile()
+{
+	return fclose(file);
 }
 
 static void LoggerInFile(int msgLength, char* date, char* prefix, char* msg, va_list args)
@@ -104,7 +140,7 @@ static void Logger(char* color, char* msg, char* prefix, va_list vList1, va_list
 	char* date = LoggerGetTime();
 	int dateLength = strlen(date);
 
-	if (LOGGER_IN_FILE) {
+	if (LOGGER_IN_FILE && loggerFileError != 1) {
 		int fullMsgLength = dateLength + prefixLength + msgLength;
 
 		LoggerInFile(fullMsgLength, date, prefix, msg, vList1);
@@ -125,6 +161,9 @@ static void Logger(char* color, char* msg, char* prefix, va_list vList1, va_list
 
 		LoggerInConsole(fullMsgLength, date, color, prefix, msg, vList2);
 	}
+
+	free(date);
+	date = NULL;
 };
 
 void LoggerInit()

@@ -8,7 +8,7 @@ Easy to use and easy.
 
 ## Build
 
-You can build this lib or copy/paste sources files in your project.
+You can build this lib or clone/fork sources files in your project.
 
 ```
 cd build 
