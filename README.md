@@ -2,7 +2,7 @@
 
 An ANSI C (C89) lib for logs
 
-<img width="588" alt="image" src="https://user-images.githubusercontent.com/15613425/141855281-0a910dbc-3532-4e43-888e-8f5e60aeaddf.png">
+![image](https://user-images.githubusercontent.com/15613425/143301975-5f01fd49-92a6-476a-a14a-d54203b58abf.png)
 
 ## Build
 
