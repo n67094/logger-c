@@ -9,8 +9,8 @@ An ANSI C (C89) lib for logs
 You can build this lib or clone/fork sources files in your project.
 
 ```
-cd build 
-make
+cd build
+make lib
 ```
 
 ## Example

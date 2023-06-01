@@ -12,10 +12,10 @@ void LoggerInit();
 int LoggerClose();
 
 void LoggerSetLevel(int flags);
-void LoggerInfo(char* msg, ...);
-void LoggerDebug(char* msg, ...);
-void LoggerSuccess(char* msg, ...);
-void LoggerWarning(char* masg, ...);
-void LoggerError(char* msg, ...);
+void LoggerInfo(const char *msg, ...);
+void LoggerDebug(const char *msg, ...);
+void LoggerSuccess(const char *msg, ...);
+void LoggerWarning(const char *masg, ...);
+void LoggerError(const char *msg, ...);
 
 #endif
