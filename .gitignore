@@ -51,8 +51,8 @@ Module.symvers
 Mkfile.old
 dkms.conf
 
-build/logger*
-build/log-*
 tags
-lib/*
 .DS_Store
+example/build/
+example/log-*
+example/demo
