@@ -1,37 +1,25 @@
 # logger.c
 
-An ANSI C (C89) lib for logs
+An ANSI C (C89) header only lib for logs
 
 ![image](https://user-images.githubusercontent.com/15613425/143301975-5f01fd49-92a6-476a-a14a-d54203b58abf.png)
 
-## Build
-
-You can build this lib or clone/fork sources files in your project.
+## Build example
 
 ```
-cd build
-make lib
-```
-
-## Example
-
-For example of use you can check in ./example folder.
-
-```
-cd build
-make example
-./logger
+cd example
+make
 ```
 
 ## Configuration
 
-c.f logger-config.h
+c.f logger.h for options
 
 ## Notes
 
 Feel free to report bugs and improvements
 
-## Like this work ? 
+## Like this work ?
 
 Help me create more of it.
 
