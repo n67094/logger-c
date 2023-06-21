@@ -15,6 +15,23 @@ make
 
 c.f logger.h for options
 
+this is how to override default configuration
+
+```
+/* configuration */
+#define LOGGER_IN_FILE 0
+#define LOGGER_INIT_MSG "Hello world !"
+
+#include "logger.h"
+
+LoggerInit();
+
+...
+
+LoggerClose();
+
+```
+
 ## Notes
 
 Feel free to report bugs and improvements
