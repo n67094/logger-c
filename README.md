@@ -13,7 +13,7 @@ make
 
 ## Configuration
 
-c.f logger.h for options
+c.f logger_config.h for options
 
 this is how to override default configuration
 
