@@ -35,8 +35,10 @@ extern "C"
 
   static int logger_level = LOGGER_LEVEL_ALL;
 
-  /* used to know if we can write in file, set to 1 if the file can't be
-   * opened */
+  /*
+   * used to know if we can write in file, set to 1 if the file can't be
+   * opened
+   */
   static int logger_file_error = 0;
 
   static void LoggerReplaceSpace(char *pointer, const char character)
@@ -48,7 +50,7 @@ extern "C"
     }
   }
 
-  /* returned pointer should be freed*/
+  /* returned pointer should be freed */
   static char *LoggerGetTime()
   {
     char *date          = NULL;
@@ -100,6 +102,9 @@ extern "C"
     free(full_filename);
     full_filename = NULL;
 
+    free(date);
+    date = NULL;
+
     return 0;
   };
 
@@ -107,7 +112,7 @@ extern "C"
   {
     if (logger_file != NULL) { return fclose(logger_file); }
 
-  return 0;
+    return 0;
   }
 
   static void LoggerInFile(
@@ -117,14 +122,15 @@ extern "C"
       const char *msg,
       va_list args)
   {
-    /* + 1 for \n added below*/
-    char *full_msg = (char *)malloc(sizeof(char) * (msg_length + 1));
+    /* + 1 for \n added below */
+    char *full_msg = (char *)malloc(sizeof(char) * (msg_length + 1) + 1);
     *full_msg      = '\0';
 
     strcat(full_msg, date);
     strcat(full_msg, prefix);
     strcat(full_msg, msg);
     strcat(full_msg, "\n");
+    strcat(full_msg, "\0");
 
     vfprintf(logger_file, full_msg, args);
 
@@ -140,9 +146,8 @@ extern "C"
       const char *msg,
       va_list args)
   {
-    char *full_msg = full_msg =
-        (char *)malloc(sizeof(char) * (msg_length + 1));
-    *full_msg = '\0';
+    char *full_msg = (char *)malloc(sizeof(char) * (msg_length + 1) + 1);
+    *full_msg      = '\0';
 
     if (LOGGER_WITH_COLOR) strcat(full_msg, LOGGER_FAINT);
 
@@ -158,6 +163,7 @@ extern "C"
 
     strcat(full_msg, msg);
     strcat(full_msg, "\n");
+    strcat(full_msg, "\0");
 
     vprintf(full_msg, args);
 
