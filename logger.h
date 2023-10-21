@@ -14,6 +14,7 @@ extern "C" {
 #define LOGGER_LEVEL_ERROR 0b10000
 #define LOGGER_LEVEL_ALL 0b11111
 
+#include <assert.h>
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -116,6 +117,9 @@ static int LoggerCloseFile() {
 
 static void LoggerInFile(int msg_length, const char *date, const char *prefix,
                          const char *msg, va_list args) {
+
+  assert(logger_file != NULL && "no file opened");
+
   /* + 2 for \n and \0 added below */
   char *full_msg = (char *)malloc(sizeof(char) * (msg_length + 2));
   *full_msg = '\0';

@@ -15,22 +15,38 @@ make
 
 c.f logger_config.h for options
 
-this is how to override default configuration
+this is how to override default configuration ex. custom-logger.h
 
 ```
-/* configuration */
-#define LOGGER_IN_FILE 0
-#define LOGGER_INIT_MSG "Hello world !"
+#ifndef CUSTOM_LOGGER_HPP
+#define CUSTOM_LOGGER_HPP
+
+#define LOGGER_IN_FILE 0 // if you don't want to log an a file
+#define LOGGER_INIT_MSG "Hello world !" // message printed once the logger is initialised
+#define LOGGER_CLOSE_MSG "Bye world !" // message printed once the logger is closed
 
 #include "logger.h"
 
-LoggerInit();
+#endif
+```
 
-...
-
-LoggerClose();
+then on your files, use your custom include (1):
 
 ```
+#include "custom-logger.h
+
+LoggerInit();
+
+{{others code}}
+
+LoggerError("This is an %s !", "example");
+
+{{others code}}
+
+LoggerClose();
+```
+
+(1) Make sure to override configuration only once, and in that case to use your custom include instead of logger.h, if you override it here and there, or mix includes, you can accounter assertions errors.
 
 ## Notes
 
