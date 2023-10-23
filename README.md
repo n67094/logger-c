@@ -1,4 +1,4 @@
-# logger.c
+# logger-c
 
 An ANSI C (C89) header only lib for logs
 
